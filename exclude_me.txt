@@ -1,6 +1,0 @@
-.idea
-*.json*
-*.txt
-*.zip
-*.xml
-__pycache__

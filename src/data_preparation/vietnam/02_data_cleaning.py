@@ -1,4 +1,5 @@
 import json
+from collections import Counter
 from pathlib import Path
 
 
@@ -26,6 +27,37 @@ def convert_vietnam_to_collie_format_dataset(query_articles: list[dict], article
     return new_query_articles, new_articles
 
 
+def replace_space_to_underscore_in_names(query_articles: list[dict], articles: list[dict]):
+    new_query_articles = []
+
+    for query_item in query_articles:
+        new_query_articles.append({
+            'query': query_item['query'],
+            'articles': list(map(lambda x: x.replace(" ", "_"), query_item['articles']))
+        })
+
+    new_articles = []
+    for article_item in articles:
+        new_articles.append({
+            'article_name': article_item['article_name'].replace(" ", "_"),
+            'article_content': article_item['article_content']
+        })
+
+    return new_query_articles, new_articles
+
+
+def drop_non_unique_articles(articles: list[dict]):
+    counter = Counter([item['article_name'] for item in articles])
+
+    new_articles = []
+    for article in articles:
+        article_name = article['article_name']
+        if counter[article_name] == 1:
+            new_articles.append(article)
+
+    return new_articles
+
+
 def main():
     query_article_preprocess_path = Path("../../../data/preprocessed/VietnamTranslated/query_article.json")
     with open(query_article_preprocess_path) as f:
@@ -40,6 +72,13 @@ def main():
         article_preprocess_data
     )
 
+    new_query_articles, new_articles = replace_space_to_underscore_in_names(
+        new_query_articles,
+        new_articles
+    )
+
+    new_articles = drop_non_unique_articles(new_articles)
+
     query_article_saving_path = Path('../../../data/cleaned/Vietnam/query_article.json')
     query_article_saving_path.parent.mkdir(parents=True, exist_ok=True)
     with open(query_article_saving_path, 'w') as f:
@@ -49,6 +88,8 @@ def main():
     article_saving_path.parent.mkdir(parents=True, exist_ok=True)
     with open(article_saving_path, 'w') as f:
         json.dump(new_articles, f, indent=4)
+
+    print("Finished!")
 
 
 if __name__ == '__main__':
