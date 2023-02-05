@@ -18,11 +18,7 @@ class RecallEvaluator(BaseEvaluator):
 
         self.top_k = top_k
 
-    def evaluate(
-            self,
-            pred_relevancy_scores: list[np.ndarray],
-            true_relevancy: list[np.ndarray]
-    ) -> dict:
+    def evaluate(self, pred_relevancy_scores: list[np.ndarray], true_relevancy: list[np.ndarray]) -> dict:
         results = {}
 
         for k in self.top_k:
@@ -30,6 +26,6 @@ class RecallEvaluator(BaseEvaluator):
             for retrieved, relevant in zip(pred_relevancy_scores, true_relevancy):
                 scores.append(calculate_recall(retrieved, relevant, k))
 
-            results[f'recall_at_{k}'] = np.mean(scores)
+            results[f"recall_at_{k}"] = np.mean(scores)
 
         return results

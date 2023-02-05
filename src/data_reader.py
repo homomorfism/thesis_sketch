@@ -1,4 +1,5 @@
 import json
+import os
 from enum import Enum
 from pathlib import Path
 
@@ -33,3 +34,14 @@ def read_data(dataset_type: DatasetType):
 
     else:
         raise RuntimeError(f"Unknown dataset type: {dataset_type}")
+
+
+def read_json(path: os.PathLike):
+    if not isinstance(path, Path):
+        path = Path(path)
+
+    assert path.is_file(), f"File not found: {path.resolve()}"
+    with open(path) as f:
+        data = json.load(f)
+
+    return data

@@ -10,16 +10,12 @@ class NDCGEvaluator(BaseEvaluator):
 
         self.top_k = top_k
 
-    def evaluate(
-            self,
-            pred_relevancy_scores: list[np.ndarray],
-            true_relevancy: list[np.ndarray]
-    ) -> dict:
+    def evaluate(self, pred_relevancy_scores: list[np.ndarray], true_relevancy: list[np.ndarray]) -> dict:
         results = {}
 
         for k in self.top_k:
             score = ndcg_score(true_relevancy, pred_relevancy_scores, k=k)
 
-            results[f'ndcg_at_{k}'] = score
+            results[f"ndcg_at_{k}"] = score
 
         return results

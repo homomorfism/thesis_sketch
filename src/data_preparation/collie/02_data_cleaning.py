@@ -21,21 +21,21 @@ def collie_clean(query_article: list[dict], articles: list[dict]):
 
     # remove (1), (i), \n, " from articles
     for article_item in articles:
-        text = article_item['article_content']
+        text = article_item["article_content"]
         text = re.sub(r"\(\w+\)", "", text)
         text = re.sub(r"\n", "", text)
         text = re.sub(r"\"", "", text)
-        article_item['article_content'] = text
+        article_item["article_content"] = text
 
     for query_item in query_article:
-        text = query_item['query']
-        text = re.sub("\"", "", text)
-        query_item['query'] = text
+        text = query_item["query"]
+        text = re.sub('"', "", text)
+        query_item["query"] = text
 
     # removing queries with empty article list
     new_query_article = []
     for query_item in query_article:
-        if query_item['articles']:
+        if query_item["articles"]:
             new_query_article.append(query_item)
 
     query_article = new_query_article
@@ -58,10 +58,10 @@ def main():
     saving_dir = Path("../../../data/cleaned/COLLIE/")
     saving_dir.mkdir(exist_ok=True, parents=True)
 
-    with open(saving_dir / "query_article.json", 'w') as f:
+    with open(saving_dir / "query_article.json", "w") as f:
         json.dump(query_article, f)
 
-    with open(saving_dir / 'articles.json', 'w') as f:
+    with open(saving_dir / "articles.json", "w") as f:
         json.dump(articles, f)
 
     print(f"Generated {len(query_article)} queries")
@@ -69,8 +69,8 @@ def main():
 
     print("Finished, saved files to ...")
     print((saving_dir / "query_article.json").resolve())
-    print((saving_dir / 'articles.json').resolve())
+    print((saving_dir / "articles.json").resolve())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

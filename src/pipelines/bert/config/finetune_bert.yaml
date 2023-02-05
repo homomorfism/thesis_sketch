@@ -1,0 +1,49 @@
+experiment_name: finetuning-bert
+seed: 42
+
+hydra:
+  job:
+    chdir: True
+  run:
+    dir: .logs/.hydra
+
+
+
+
+
+
+
+# for each positive sample samples 5 negative samples
+sampling_negative_ratio: 5
+
+
+val_size: 0.2
+batch_size: 32
+num_workers: 8
+
+
+model:
+  name: bert-base-uncased
+  max_length: 512
+  lr: 2e-5
+
+  weight_decay: 0.01
+
+
+
+train:
+  max_epochs: 10
+  precision: 16
+  accelerator: gpu
+  limit_train_batches: 200
+
+
+
+data:
+  collie:
+    articles: data/cleaned/COLLIE/articles.json
+    queries: data/cleaned/COLLIE/query_article.json
+    n_queries: 885
+  vietnam:
+    article: data/cleaned/Vietnam/articles.json
+    queries: data/cleaned/Vietnam/query_article.json

@@ -16,7 +16,6 @@ def f_score(retrieved, relevant, threshold):
 
 
 class FScoreEvaluator(BaseEvaluator):
-
     def __init__(self):
         super().__init__()
         self.thresholds = np.linspace(0.5, 1.0, num=20)
@@ -34,6 +33,4 @@ class FScoreEvaluator(BaseEvaluator):
             scores_at_threshold.append(np.mean(scores))
 
         max_score = max(scores_at_threshold)
-        return {
-            'f_score': max_score
-        }
+        return {"f_score": max_score}
